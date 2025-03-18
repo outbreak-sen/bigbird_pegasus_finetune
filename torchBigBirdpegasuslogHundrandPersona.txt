@@ -1,0 +1,130 @@
+ % python torchBigBirdPegasus.py 
+加载模型和分词器
+tokenizer_config.json: 1.19kB [00:00, 76.3kB/s]                           
+config.json: 1.05kB [00:00, 84.4kB/s]                                     
+spiece.model: 100%|██████████████████| 1.92M/1.92M [00:01<00:00, 1.14MB/s]
+tokenizer.json: 3.51MB [00:01, 3.47MB/s]
+special_tokens_map.json: 775B [00:00, 598kB/s]                            
+pytorch_model.bin: 100%|██████████████████████████████| 2.31G/2.31G [08:12<00:00, 4.68MB/s]
+/home/houbosen/anaconda3/envs/mindspore39NLP/lib/python3.9/site-packages/torch/_utils.py:776: UserWarning: TypedStorage is deprecated. It will be removed in the future and UntypedStorage will be the only storage class. This should only matter to you if you are using storages directly.  To access UntypedStorage directly, use tensor.untyped_storage() instead of tensor.storage()
+  return self.fget.__get__(instance, owner)()
+generation_config.json: 100%|█████████████████████████████| 232/232 [00:00<00:00, 39.6kB/s]
+模型和分词器加载完成
+input question: Nice to meet you too. What are you interested in?
+Attention type 'block_sparse' is not possible if sequence_length: 13 <= num global tokens: 2 * config.block_size + min. num sliding tokens: 3 * config.block_size + config.num_random_blocks * config.block_size + additional buffer: config.num_random_blocks * config.block_size = 704 with config.block_size = 64, config.num_random_blocks = 3. Changing attention type to 'original_full'...
+model.safetensors:   6%|█▉                             | 147M/2.31G [00:31<06:56, 5.19MB/s]
+output answer: we present a new method for the detection of rare events , based on the use of time - frequency combs .<n> we show how this technique can be used to detect rare events in a broad range of time - frequency domains .<n> we also show how this technique can be used to study the evolution of the spectrum of rare events . <n> rare events ; amplitude ; phase ; amplitude ; frequency ; time - frequency combs + _ pacs : _<n> 11.30.er , 12.20.fv , 12.20.ds , 12.60.jv , 12.60.jv @xmath0 department of physics and astronomy , iowa state university , ames , ia 50011 + @xmath1 department of physics and astronomy , university of iowa , ames , ia 50011 + @xmath2 department of physics and astronomy , university of iowa , ames , ia 50011 + _ key words : _ rare events ; amplitude ; phase ; frequency ; spectrum ; time - frequency combs + _ pacs : _<n> 11.30.er 
+加载数据集
+model.safetensors:   7%|██▎                            | 168M/2.31G [00:36<07:43, 4.62MB/s]dataset finished
+dataset: DatasetDict({
+    train: Dataset({
+        features: ['user 1 personas', 'user 2 personas', 'Best Generated Conversation'],
+        num_rows: 8938
+    })
+    validation: Dataset({
+        features: ['user 1 personas', 'user 2 personas', 'Best Generated Conversation'],
+        num_rows: 1000
+    })
+    test: Dataset({
+        features: ['user 1 personas', 'user 2 personas', 'Best Generated Conversation'],
+        num_rows: 968
+    })
+})
+dataset['train'][0]: {'user 1 personas': 'I am 32.\nI do not want a job.\nI play video games all day.\nI still live at home with my parents.', 'user 2 personas': 'My favorite drink is iced coffee.\nI have a black belt in karate.\nI m in a jazz band and play the saxophone.\nI vacation along lake michigan every summer.', 'Best Generated Conversation': "User 1: Hi! I'm [user 1's name].\nUser 2: Hi [user 1's name], I'm [user 2's name].\nUser 1: What do you do for fun?\nUser 2: I like to play video games, go to the beach, and read.\nUser 1: I like to play video games too! I'm not much of a reader, though.\nUser 2: What video games do you like to play?\nUser 1: I like to play a lot of different games, but I'm really into competitive online games right now.\nUser 2: I'm not really into competitive games, I like to play more relaxing games.\nUser 1: That's cool. What kind of relaxing games do you like to play?\nUser 2: I like to play puzzle games, simulation games, and story-based games.\nUser 1: I've never been much of a puzzle game person, but I do like simulation games and story-based games.\nUser 2: Nice! What's your favorite simulation game?\nUser 1: I like Stardew Valley a lot. It's a farming game, but it's also really relaxing and fun.\nUser 2: I've heard good things about that game. I might have to check it out.\nUser 1: You should! It's a lot of fun.\nUser 2: Well, I'm glad we met. Maybe we can play some games together sometime.\nUser 1: That would be fun!\nUser 2: Great! I'll send you my Steam name.\nUser 1: Ok, sounds good."}
+dataset_train: Dataset({
+    features: ['user 1 personas', 'user 2 personas', 'Best Generated Conversation'],
+    num_rows: 8938
+})
+dataset_train['Best Generated Conversation'][0]:
+ User 1: Hi! I'm [user 1's name].
+User 2: Hi [user 1's name], I'm [user 2's name].
+User 1: What do you do for fun?
+User 2: I like to play video games, go to the beach, and read.
+User 1: I like to play video games too! I'm not much of a reader, though.
+User 2: What video games do you like to play?
+User 1: I like to play a lot of different games, but I'm really into competitive online games right now.
+User 2: I'm not really into competitive games, I like to play more relaxing games.
+User 1: That's cool. What kind of relaxing games do you like to play?
+User 2: I like to play puzzle games, simulation games, and story-based games.
+User 1: I've never been much of a puzzle game person, but I do like simulation games and story-based games.
+User 2: Nice! What's your favorite simulation game?
+User 1: I like Stardew Valley a lot. It's a farming game, but it's also really relaxing and fun.
+User 2: I've heard good things about that game. I might have to check it out.
+User 1: You should! It's a lot of fun.
+User 2: Well, I'm glad we met. Maybe we can play some games together sometime.
+User 1: That would be fun!
+User 2: Great! I'll send you my Steam name.
+User 1: Ok, sounds good.
+dataset_train['user 1 personas'][0]: I am 32.
+I do not want a job.
+I play video games all day.
+I still live at home with my parents.
+dataset_train['user 2 personas'][0]: My favorite drink is iced coffee.
+I have a black belt in karate.
+I m in a jazz band and play the saxophone.
+I vacation along lake michigan every summer.
+dataset_train.column_names: ['user 1 personas', 'user 2 personas', 'Best Generated Conversation']
+Map: 100%|████████████████████████████████████| 8938/8938 [00:01<00:00, 5928.68 examples/s]
+Map: 100%|████████████████████████████████████| 1000/1000 [00:00<00:00, 5789.50 examples/s]
+Saving the dataset (1/1 shards): 100%|██| 245444/245444 [00:00<00:00, 899581.57 examples/s]
+Saving the dataset (1/1 shards): 100%|████| 27749/27749 [00:00<00:00, 878457.72 examples/s]
+tokenizer数据集set (1/1 shards): 100%|████| 27749/27749 [00:00<00:00, 884876.01 examples/s]
+                                                                                          /home/houbosen/anaconda3/envs/mindspore39NLP/lib/python3.9/site-packages/transformers/tokenization_utils_base.py:3970: UserWarning: `as_target_tokenizer` is deprecated and will be removed in v5 of Transformers. You can tokenize your labels by using the argument `text_target` of the regular `__call__` method (either in the same call as your input texts if you use the same keyword arguments, or in a separate call.
+  warnings.warn(
+Map: 100%|████████████████████████████████| 245444/245444 [00:51<00:00, 4768.99 examples/s]
+Map: 100%|██████████████████████████████████| 27749/27749 [00:05<00:00, 4935.44 examples/s]
+Filter: 100%|█████████████████████████████| 245444/245444 [00:49<00:00, 4981.58 examples/s]
+Filter: 100%|███████████████████████████████| 27749/27749 [00:05<00:00, 4915.17 examples/s]
+Saving the dataset (2/2 shards): 100%|███| 245444/245444 [00:03<00:00, 78602.35 examples/s]
+Saving the dataset (1/1 shards): 100%|█████| 27749/27749 [00:00<00:00, 78565.57 examples/s]
+dataset_train_tokenized: Dataset({00%|█████| 27749/27749 [00:00<00:00, 79186.16 examples/s]
+    features: ['input', 'target', 'input_ids', 'attention_mask', 'labels'],
+    features: ['input', 'target', 'input_ids', 'attention_mask', 'labels'],
+    num_rows: 2454
+})
+dataset_valid_tokenized: Dataset({
+    features: ['input', 'target', 'input_ids', 'attention_mask', 'labels'],
+    num_rows: 277
+})
+/home/houbosen/anaconda3/envs/mindspore39NLP/lib/python3.9/site-packages/transformers/training_args.py:1594: FutureWarning: `evaluation_strategy` is deprecated and will be removed in version 4.46 of 🤗 Transformers. Use `eval_strategy` instead
+  warnings.warn(
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+  0%|                                                                                                                                                                                                                                                      | 0/770 [00:00<?, ?it/s]/home/houbosen/anaconda3/envs/mindspore39NLP/lib/python3.9/site-packages/torch/nn/parallel/_functions.py:68: UserWarning: Was asked to gather along dimension 0, but all input tensors were scalars; will instead unsqueeze and return a vector.
+  warnings.warn('Was asked to gather along dimension 0, but all '
+{'loss': 7.6556, 'grad_norm': 1729101.75, 'learning_rate': 3.85e-05, 'epoch': 1.0}                                                                                                                                                                                                 
+{'eval_loss': 0.8737613558769226, 'eval_runtime': 11.9846, 'eval_samples_per_second': 23.113, 'eval_steps_per_second': 0.751, 'epoch': 1.0}                                                                                                                                        
+{'loss': 0.596, 'grad_norm': 62302.07421875, 'learning_rate': 4.5970149253731345e-05, 'epoch': 2.0}                                                                                                                                                                                
+{'eval_loss': 0.48042893409729004, 'eval_runtime': 9.4748, 'eval_samples_per_second': 29.235, 'eval_steps_per_second': 0.95, 'epoch': 2.0}                                                                                                                                         
+{'loss': 0.4145, 'grad_norm': 61993.30859375, 'learning_rate': 4.022388059701493e-05, 'epoch': 3.0}                                                                                                                                                                                
+{'eval_loss': 0.3490177094936371, 'eval_runtime': 9.4639, 'eval_samples_per_second': 29.269, 'eval_steps_per_second': 0.951, 'epoch': 3.0}                                                                                                                                         
+ 39%|███████████████████████████████████████████████████████████████████████████████████████████▋                                                                                                                                                | 299/770 [11:36<17:05,  2.18s/ 39%|█████████████████████████████████████▊                                                           | 300/770 [11:38<17:03,  2.18s/it]                                                                                                                                        {'loss': 0.3022, 'grad_norm': 74635.03125, 'learning_rate': 3.447761194029851e-05, 'epoch': 4.0}                                        
+{'eval_loss': 0.2861063480377197, 'eval_runtime': 9.493, 'eval_samples_per_second': 29.179, 'eval_steps_per_second': 0.948, 'epoch': 4.0}                                                                                                                                       
+{'loss': 0.2555, 'grad_norm': 121836.40625, 'learning_rate': 2.8731343283582092e-05, 'epoch': 5.0}                                      
+{'eval_loss': 0.26694515347480774, 'eval_runtime': 9.4715, 'eval_samples_per_second': 29.246, 'eval_steps_per_second': 0.95, 'epoch': 5.0}                                                                                                                                      
+{'loss': 0.2357, 'grad_norm': 57059.9921875, 'learning_rate': 2.2985074626865672e-05, 'epoch': 6.0}                                                                                                                                                                                
+{'eval_loss': 0.26115942001342773, 'eval_runtime': 9.4736, 'eval_samples_per_second': 29.239, 'eval_steps_per_second': 0.95, 'epoch': 6.0}                                                                                                                                         
+ 65%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                                  | 500/770 [19:26<09:52,  2.20s/it]/home/houbosen/anaconda3/envs/mindspore39NLP/lib/python3.9/site-packages/transformers/modeling_utils.py:2810: UserWarning: Moving the following attributes in the config to the generation config: {'max_length': 256, 'num_beams': 5, 'length_penalty': 0.8}. You are seeing this warning because you've set generation parameters in the model config, as opposed to in the generation config.
+  warnings.warn(
+/home/houbosen/anaconda3/envs/mindspore39NLP/lib/python3.9/site-packages/torch/nn/parallel/_functions.py:68: UserWarning: Was asked to gather along dimension 0, but all input tensors were scalars; will instead unsqueeze and return a vector.
+  warnings.warn('Was asked to gather along dimension 0, but all '
+{'loss': 0.2247, 'grad_norm': 53513.59375, 'learning_rate': 1.7238805970149256e-05, 'epoch': 7.0}                                                                                                                                                                                  
+{'eval_loss': 0.2544946074485779, 'eval_runtime': 9.4803, 'eval_samples_per_second': 29.218, 'eval_steps_per_second': 0.949, 'epoch': 7.0}                                                                                                                                         
+{'loss': 0.2166, 'grad_norm': 86095.4765625, 'learning_rate': 1.1492537313432836e-05, 'epoch': 8.0}                                                                                                                                                                                
+{'eval_loss': 0.25257399678230286, 'eval_runtime': 9.5008, 'eval_samples_per_second': 29.155, 'eval_steps_per_second': 0.947, 'epoch': 8.0}                                                                                                                                        
+{'loss': 0.2107, 'grad_norm': 62596.91796875, 'learning_rate': 5.746268656716418e-06, 'epoch': 9.0}                                                                                                                                                                                
+{'eval_loss': 0.25187215209007263, 'eval_runtime': 9.4601, 'eval_samples_per_second': 29.281, 'eval_steps_per_second': 0.951, 'epoch': 9.0}                                                                                                                                        
+{'loss': 0.2075, 'grad_norm': 53455.1640625, 'learning_rate': 0.0, 'epoch': 10.0}                                                                                                                                                                                                  
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 770/770 [30:14<00:00,  2.20s/it]/home/houbosen/anaconda3/envs/mindspore39NLP/lib/python3.9/site-packages/torch/nn/parallel/_functions.py:68: UserWarning: Was asked to gather along dimension 0, but all input tensors were scalars; will instead unsqueeze and return a vector.
+  warnings.warn('Was asked to gather along dimension 0, but all '
+{'eval_loss': 0.25098198652267456, 'eval_runtime': 9.4654, 'eval_samples_per_second': 29.264, 'eval_steps_per_second': 0.951, 'epoch': 10.0}                                                                                                                                       
+{'train_runtime': 1824.2525, 'train_samples_per_second': 13.452, 'train_steps_per_second': 0.422, 'train_loss': 1.0318991462905687, 'epoch': 10.0}                                                                                                                                 
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 770/770 [30:24<00:00,  2.37s/it]
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 9/9 [00:08<00:00,  1.07it/s]
+Evaluation results: {'eval_loss': 0.25098198652267456, 'eval_runtime': 9.4886, 'eval_samples_per_second': 29.193, 'eval_steps_per_second': 0.949, 'epoch': 10.0}
+再次测试对话
+input question: Nice to meet you too. What are you interested in?
+Attention type 'block_sparse' is not possible if sequence_length: 13 <= num global tokens: 2 * config.block_size + min. num sliding tokens: 3 * config.block_size + config.num_random_blocks * config.block_size + additional buffer: config.num_random_blocks * config.block_size = 704 with config.block_size = 64, config.num_random_blocks = 3. Changing attention type to 'original_full'...
+output answer: how do you like to do for fun?
